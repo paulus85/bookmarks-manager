@@ -1,3 +1,11 @@
 .BookmarkList {
   width: 1000px;
 }
+
+.BookmarkList-empty {
+  text-align: center;
+}
+
+.BookmarkList-list {
+  min-height: 320px;
+}

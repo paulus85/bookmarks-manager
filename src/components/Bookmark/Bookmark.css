@@ -2,7 +2,7 @@
   padding: 12px;
 }
 
-.Bookmark:nth-of-type(2n) {
+.Bookmark:nth-of-type(2n + 1) {
   background-color: #f5f5f5;
 }
 
