@@ -1,14 +1,35 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer } from "react";
 import { Link } from "./pages/types";
 import {
   getPhotoProperties,
   getVideoProperties,
 } from "./providers/bookmarksPropertiesProvider";
 import BookmarkList from "./pages/BookmarkList/BookmarkList";
+
 import "./App.css";
 
-function App() {
-  const [bookmarks, setBookmarks] = useState<Link[]>([]);
+/**
+ * Union type to describe all the actions possible to dispatch to the list of bookmarks
+ */
+export type ACTION_TYPE =
+  | { type: "LOAD"; payload: Link[] } // Used when loading a bunch of bookmarks at once
+  | { type: "EDIT"; payload: Link } // Used when modifying a Link
+  | { type: "DELETE"; payload: Link }; // Used when deleting a Link from the list
+
+const reducer = (state: Link[], action: ACTION_TYPE) => {
+  switch (action.type) {
+    case "LOAD":
+      return action.payload;
+    case "DELETE":
+      return state.filter((link) => link.url !== action.payload.url);
+    // TODO Handle other cases
+    default:
+      throw new Error();
+  }
+};
+
+const App = () => {
+  const [bookmarks, dispatch] = useReducer(reducer, []);
 
   /**
    * Setup when starting the app.
@@ -41,16 +62,16 @@ function App() {
           )
       )
       .then((links) => {
-        setBookmarks(links);
+        dispatch({ type: "LOAD", payload: links });
       });
   }, []);
 
   return (
     <div className={"App"}>
       <h1>Bookmark Manager</h1>
-      <BookmarkList bookmarksList={bookmarks} />
+      <BookmarkList bookmarksList={bookmarks} dispatchToList={dispatch} />
     </div>
   );
-}
+};
 
 export default App;

@@ -5,6 +5,7 @@ import "./Bookmark.css";
 
 export type BookmarkProps = {
   link: Link;
+  onDelete: (link: Link) => void;
 };
 
 const IntlDateTimeOptions: Intl.DateTimeFormatOptions = {
@@ -20,7 +21,7 @@ const IntlDateTimeOptions: Intl.DateTimeFormatOptions = {
 /**
  * Component to display a Bookmark.
  */
-const Bookmark = ({ link }: BookmarkProps) => {
+const Bookmark = ({ link, onDelete }: BookmarkProps) => {
   const buildSubtitle = (link: Link): string => {
     const formattedDate = new Intl.DateTimeFormat("default", IntlDateTimeOptions).format(
       link.addDate
@@ -34,15 +35,20 @@ const Bookmark = ({ link }: BookmarkProps) => {
 
   return (
     <div className={"Bookmark"}>
-      <a
-        className={"Bookmark-title"}
-        href={link.url}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        {link.title}
-      </a>
-      <div className={"Bookmark-subtitle"}>{buildSubtitle(link)}</div>
+      <div className={"Bookmark-body"}>
+        <a
+          className={"Bookmark-title"}
+          href={link.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {link.title}
+        </a>
+        <div className={"Bookmark-subtitle"}>{buildSubtitle(link)}</div>
+      </div>
+      <div className={"Bookmark-actions"}>
+        <button onClick={() => onDelete(link)}>🗑️</button>
+      </div>
     </div>
   );
 };
