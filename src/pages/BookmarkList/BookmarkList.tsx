@@ -3,6 +3,7 @@ import { Link } from "../types";
 import Bookmark from "../../components/Bookmark/Bookmark";
 import Pagination from "../../components/Pagination/Pagination";
 import { ACTION_TYPE } from "../../App";
+import BookmarkAdd from "../../components/BookmarkAdd/BookmarkAdd";
 
 import "./BookmarkList.css";
 
@@ -25,6 +26,11 @@ const BookmarkList = ({ bookmarksList, dispatchToList }: BookmarkListProps) => {
 
   return (
     <div className={"BookmarkList"}>
+      <BookmarkAdd
+        onNewBookmark={() => {
+          //TODO
+        }}
+      />
       {bookmarksList.length === 0 ? (
         <div className={"BookmarkList-empty"}>Vide</div>
       ) : (
@@ -37,6 +43,7 @@ const BookmarkList = ({ bookmarksList, dispatchToList }: BookmarkListProps) => {
                   key={link.url}
                   link={link}
                   onDelete={(linkToDelete) =>
+                    //TODO Deal with changing page when deleting the last item of a page.
                     dispatchToList({ type: "DELETE", payload: linkToDelete })
                   }
                 />
