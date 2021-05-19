@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import KeywordEdition from "../../components/KeywordEdition/KeywordEdition";
 import { Link } from "../types";
 
@@ -13,6 +13,7 @@ const BookmarkEdit = ({ bookmarksMap, onEditLink }: BookmarkEditProps) => {
   // With the route configuration we know that a parameter is provided
   // (if not, the default route is used).
   const { encodedUrl } = useParams<{ encodedUrl: string }>();
+  const history = useHistory();
   const url = decodeURIComponent(encodedUrl);
   const editedLink = bookmarksMap.get(url);
   return (
@@ -24,6 +25,7 @@ const BookmarkEdit = ({ bookmarksMap, onEditLink }: BookmarkEditProps) => {
             keywords={editedLink.keywords}
             onNewKeywords={(keywords) => {
               onEditLink({ ...editedLink, keywords });
+              history.push("/");
             }}
           />
         </div>

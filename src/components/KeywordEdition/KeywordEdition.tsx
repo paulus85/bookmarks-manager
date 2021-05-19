@@ -9,29 +9,38 @@ export type KeywordEditionProps = {
  * Component to manage all the logic and presentation of keyword edition.
  */
 const KeywordEdition = ({ keywords, onNewKeywords }: KeywordEditionProps) => {
+  const [keywordsDraft, setKeywordsDraft] = useState<string[]>(keywords);
+
   const onKeywordChange =
     (
       keywords: string[],
       keywordIndex: number
     ): React.ChangeEventHandler<HTMLInputElement> =>
     (event) => {
-      console.log(keywordIndex, event.target.value);
       let newKeywords = Array.from(keywords);
       newKeywords[keywordIndex] = event.target.value;
-      onNewKeywords(newKeywords);
+      setKeywordsDraft(newKeywords);
     };
 
   return (
     <div className={"KeywordEdition"}>
-      {keywords.map((keyword, index) => (
-        <div key={index}>
-          <input
-            type="text"
-            value={keyword}
-            onChange={onKeywordChange(keywords, index)}
-          />
-        </div>
-      ))}
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          onNewKeywords(keywordsDraft);
+        }}
+      >
+        {keywordsDraft.map((keyword, index) => (
+          <div key={index}>
+            <input
+              type="text"
+              value={keyword}
+              onChange={onKeywordChange(keywordsDraft, index)}
+            />
+          </div>
+        ))}
+        <input type="submit" value={"Submit"} />
+      </form>
     </div>
   );
 };
