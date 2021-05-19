@@ -52,6 +52,7 @@ const Bookmark = ({ link, onDelete }: BookmarkProps) => {
           {link.title}
         </a>
         <div className={"Bookmark-subtitle"}>{buildSubtitle(link)}</div>
+        <div className={"Bookmark-subtitle"}>Keywords: {link.keywords.join(" • ")}</div>
       </div>
       <div className={"Bookmark-actions"}>
         <button onClick={() => goToEdit(link)}>🖊️️</button>
