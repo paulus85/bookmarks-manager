@@ -1,10 +1,12 @@
 import React, { useEffect, useReducer } from "react";
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import { Link } from "./pages/types";
 import {
   getPhotoProperties,
   getVideoProperties,
 } from "./providers/bookmarksPropertiesProvider";
 import BookmarkList from "./pages/BookmarkList/BookmarkList";
+import BookmarkEdit from "./pages/BookmarkEdit/BookmarkEdit";
 
 import "./App.css";
 
@@ -17,14 +19,16 @@ export type ACTION_TYPE =
   | { type: "DELETE"; payload: Link }; // Used when deleting a Link from the list
 
 const reducer = (state: Map<string, Link>, action: ACTION_TYPE) => {
+  const newState = new Map(state);
   switch (action.type) {
     case "LOAD":
       return new Map(action.payload.map((link) => [link.url, link]));
     case "DELETE":
-      const newState = new Map(state);
       newState.delete(action.payload.url);
       return newState;
-    // TODO Handle other cases
+    case "EDIT":
+      newState.set(action.payload.url, action.payload);
+      return newState;
     default:
       throw new Error();
   }
@@ -69,13 +73,28 @@ const App = () => {
   }, []);
 
   return (
-    <div className={"App"}>
-      <h1>Bookmark Manager</h1>
-      <BookmarkList
-        bookmarksList={Array.from(bookmarks.values())}
-        dispatchToList={dispatch}
-      />
-    </div>
+    <BrowserRouter>
+      <div className={"App"}>
+        <h1>Bookmark Manager</h1>
+        <Switch>
+          <Route path={"/edit/:encodedUrl"}>
+            <BookmarkEdit
+              bookmarksMap={bookmarks}
+              onEditLink={(link) => dispatch({ type: "EDIT", payload: link })}
+            />
+          </Route>
+          <Route exact path={"/"}>
+            <BookmarkList
+              bookmarksList={Array.from(bookmarks.values())}
+              dispatchToList={dispatch}
+            />
+          </Route>
+          <Route path={"/"}>
+            <Redirect to={"/"} />
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 };
 

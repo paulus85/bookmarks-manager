@@ -3,6 +3,7 @@ type PropertiesBase = {
   title: string;
   author: string;
   addDate: Date;
+  keywords: string[];
 };
 
 export type VideoLink = PropertiesBase & {

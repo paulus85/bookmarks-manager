@@ -18,6 +18,7 @@ export const getPhotoProperties = async (
       addDate,
       height: payload.height,
       width: payload.width,
+      keywords: [],
     };
   } else {
     throw new Error(response.statusText);
@@ -42,6 +43,7 @@ export const getVideoProperties = async (
       height: payload.height,
       width: payload.width,
       duration: payload.duration,
+      keywords: ["Hey", "Hey2"],
     };
   } else {
     throw new Error(response.statusText);

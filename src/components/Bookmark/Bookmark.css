@@ -13,6 +13,15 @@
 
 .Bookmark-actions {
   flex: 0 0;
+  display: flex;
+}
+
+.Bookmark-actions button {
+  margin-right: 5px;
+}
+
+.Bookmark-actions button:last-of-type {
+  margin-right: 0;
 }
 
 .Bookmark-subtitle {
