@@ -22,6 +22,12 @@ const KeywordEdition = ({ keywords, onNewKeywords }: KeywordEditionProps) => {
       setKeywordsDraft(newKeywords);
     };
 
+  const onKeywordDelete = (keywords: string[], keywordIndex: number) => {
+    let newKeywords = Array.from(keywords);
+    newKeywords.splice(keywordIndex, 1);
+    setKeywordsDraft(newKeywords);
+  };
+
   return (
     <div className={"KeywordEdition"}>
       <form
@@ -37,6 +43,9 @@ const KeywordEdition = ({ keywords, onNewKeywords }: KeywordEditionProps) => {
               value={keyword}
               onChange={onKeywordChange(keywordsDraft, index)}
             />
+            <button type="button" onClick={() => onKeywordDelete(keywordsDraft, index)}>
+              ❌
+            </button>
           </div>
         ))}
         <input type="submit" value={"Submit"} />
