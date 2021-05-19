@@ -16,12 +16,14 @@ export type ACTION_TYPE =
   | { type: "EDIT"; payload: Link } // Used when modifying a Link
   | { type: "DELETE"; payload: Link }; // Used when deleting a Link from the list
 
-const reducer = (state: Link[], action: ACTION_TYPE) => {
+const reducer = (state: Map<string, Link>, action: ACTION_TYPE) => {
   switch (action.type) {
     case "LOAD":
-      return action.payload;
+      return new Map(action.payload.map((link) => [link.url, link]));
     case "DELETE":
-      return state.filter((link) => link.url !== action.payload.url);
+      const newState = new Map(state);
+      newState.delete(action.payload.url);
+      return newState;
     // TODO Handle other cases
     default:
       throw new Error();
@@ -29,7 +31,7 @@ const reducer = (state: Link[], action: ACTION_TYPE) => {
 };
 
 const App = () => {
-  const [bookmarks, dispatch] = useReducer(reducer, []);
+  const [bookmarks, dispatch] = useReducer(reducer, new Map<string, Link>());
 
   /**
    * Setup when starting the app.
@@ -69,7 +71,10 @@ const App = () => {
   return (
     <div className={"App"}>
       <h1>Bookmark Manager</h1>
-      <BookmarkList bookmarksList={bookmarks} dispatchToList={dispatch} />
+      <BookmarkList
+        bookmarksList={Array.from(bookmarks.values())}
+        dispatchToList={dispatch}
+      />
     </div>
   );
 };
